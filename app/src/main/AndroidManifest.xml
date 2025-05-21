@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.enesozden.javamaps">
+
+    <!-- Konum izinleri -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.JavaTravelBook">
+
+        <!-- WelcomeActivity ANA EKRAN olarak ayarlandı -->
+        <activity android:name=".view.WelcomeActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- MapsActivity -->
+        <activity
+            android:name=".view.MapsActivity"
+            android:exported="true" />
+
+        <!-- MainActivity -->
+        <activity
+            android:name=".view.MainActivity"
+            android:exported="true" />
+
+        <!-- LoginActivity -->
+        <activity
+            android:name=".view.LoginActivity"
+            android:exported="true" />
+
+        <activity android:name=".view.SignUpActivity"
+            android:exported="true" />
+
+        <!-- Google Maps API Key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDFzCPHNWAp0elXuy2JtF8KtHtklL30qZs" />
+
+    </application>
+
+</manifest>
+
+
+
