@@ -15,18 +15,42 @@ public class Place implements Serializable {
     @ColumnInfo(name = "name")
     public String name;
 
+    @ColumnInfo(name = "description")
+    public String description;
+
     @ColumnInfo(name = "latitude")
     public Double latitude;
 
     @ColumnInfo(name = "longitude")
     public Double longitude;
 
-    public Place(String name, Double latitude, Double longitude) {
+    // Yeni constructor: açıklama dahil
+    public Place(String name, String description, Double latitude, Double longitude) {
         this.name = name;
+        this.description = description;
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    // Boş constructor Room için gerekebilir
+    // Eski constructor (kullanılıyorsa bozulmasın diye bıraktım)
+    public Place(String name, Double latitude, Double longitude) {
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.description = ""; // default boş bırak
+    }
+
+    // Boş constructor Room için
     public Place() {}
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    @ColumnInfo(name = "image_uri")
+    public String imageUri;
 }

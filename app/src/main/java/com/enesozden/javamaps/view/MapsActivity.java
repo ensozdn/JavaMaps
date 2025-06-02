@@ -74,9 +74,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         selectedLatitude = 0.0;
         selectedLongitude = 0.0;
 
-        binding.saveButton.setEnabled(false);
+        binding.buttonSave.setEnabled(false);
 
-        db = Room.databaseBuilder(getApplicationContext(), PlaceDatabase.class, "Places").build();
+        db = Room.databaseBuilder(getApplicationContext(), PlaceDatabase.class, "Places")
+                .fallbackToDestructiveMigration()
+                .build();
         placeDao = db.placeDao();
     }
 
@@ -89,8 +91,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String info = intent.getStringExtra("info");
 
         if ("new".equals(info)) {
-            binding.saveButton.setVisibility(View.VISIBLE);
-            binding.deleteButton.setVisibility(View.GONE);
+            binding.buttonSave.setVisibility(View.VISIBLE);
+            binding.buttonDelete.setVisibility(View.GONE);
 
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locationListener = location -> {
@@ -124,15 +126,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             placeFromMain = (Place) intent.getSerializableExtra("place");
 
             if (placeFromMain != null) {
-                LatLng latLng = new LatLng(placeFromMain.latitude, placeFromMain.longitude);
-                mMap.addMarker(new MarkerOptions().position(latLng).title(placeFromMain.name));
+                double lat = placeFromMain.latitude != null ? placeFromMain.latitude : 0.0;
+                double lon = placeFromMain.longitude != null ? placeFromMain.longitude : 0.0;
+                LatLng latLng = new LatLng(lat, lon);
+
+                String name = placeFromMain.name != null ? placeFromMain.name : "";
+                String description = placeFromMain.description != null ? placeFromMain.description : "";
+
+                mMap.addMarker(new MarkerOptions().position(latLng).title(name));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
-                binding.placeNameText.setText(placeFromMain.name);
-                binding.saveButton.setVisibility(View.GONE);
-                binding.deleteButton.setVisibility(View.VISIBLE);
+                binding.editTextPlaceName.setText(name);
+                binding.editTextDescription.setText(description);
+
+                binding.buttonSave.setVisibility(View.GONE);
+                binding.buttonDelete.setVisibility(View.VISIBLE);
             }
         }
+        binding.buttonSave.setOnClickListener(this::save);
+
     }
 
     @Override
@@ -141,11 +153,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(latLng));
         selectedLatitude = latLng.latitude;
         selectedLongitude = latLng.longitude;
-        binding.saveButton.setEnabled(true);
+        binding.buttonSave.setEnabled(true);
     }
 
     public void save(View view) {
-        Place place = new Place(binding.placeNameText.getText().toString(), selectedLatitude, selectedLongitude);
+        String name = binding.editTextPlaceName.getText() != null ? binding.editTextPlaceName.getText().toString() : "";
+        String description = binding.editTextDescription.getText() != null ? binding.editTextDescription.getText().toString() : "";
+        Place place = new Place(name, description, selectedLatitude, selectedLongitude);
         compositeDisposable.add(placeDao.insert(place)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

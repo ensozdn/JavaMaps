@@ -1,26 +1,27 @@
 package com.enesozden.javamaps.adapter;
 
-
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import java.util.List;
+
 import com.enesozden.javamaps.model.Place;
+import com.enesozden.javamaps.databinding.RecyclerRowBinding;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.enesozden.javamaps.databinding.RecyclerRowBinding;
-import com.enesozden.javamaps.view.MapsActivity;
-
 
 public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceHolder> {
 
-    private List<Place> placeList;
+    private final List<Place> placeList;
+    private final OnPlaceClickListener listener;
 
-    public PlaceAdapter(List<Place> placeList) {
+    // 🔥 Constructor
+    public PlaceAdapter(List<Place> placeList, OnPlaceClickListener listener) {
         this.placeList = placeList;
+        this.listener = listener;
     }
 
+    // 🔁 ViewHolder oluştur
     @NonNull
     @Override
     public PlaceHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -28,26 +29,24 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceHolder>
         return new PlaceHolder(binding);
     }
 
+    // 🔄 ViewHolder’a veriyi bağla
     @Override
     public void onBindViewHolder(@NonNull PlaceHolder holder, int position) {
-        // Veriyi TextView'e yazdır
-        holder.binding.recyclerViewTextView.setText(placeList.get(position).name);
+        Place currentPlace = placeList.get(position);
+        holder.binding.recyclerViewTextView.setText(currentPlace.name);
 
-        // Satıra tıklanabilirlik ekle
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(holder.itemView.getContext(), MapsActivity.class);
-            intent.putExtra("place", placeList.get(position)); // Seçilen veri gönderiliyor
-            intent.putExtra("info", "old"); // Bilgi etiketi
-            holder.itemView.getContext().startActivity(intent);
-        });
+        // 🔥 Tıklama: dışarıdan gelen listener’a bildir
+        holder.itemView.setOnClickListener(view -> listener.onPlaceClick(currentPlace));
+
     }
 
-
+    // 📏 Eleman sayısı
     @Override
     public int getItemCount() {
         return placeList.size();
     }
 
+    // 📦 ViewHolder sınıfı
     public static class PlaceHolder extends RecyclerView.ViewHolder {
         RecyclerRowBinding binding;
 
@@ -55,6 +54,11 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceHolder>
             super(binding.getRoot());
             this.binding = binding;
         }
+    }
+
+    // 👂 Interface (dışarıya olay bildirmek için)
+    public interface OnPlaceClickListener {
+        void onPlaceClick(Place place);
     }
 }
 
