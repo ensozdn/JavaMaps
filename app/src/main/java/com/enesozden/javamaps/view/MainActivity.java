@@ -23,7 +23,6 @@ import com.enesozden.javamaps.roomdb.PlaceDatabase;
 import java.util.List;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
-
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
@@ -34,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
@@ -42,24 +40,30 @@ public class MainActivity extends AppCompatActivity {
         db = Room.databaseBuilder(getApplicationContext(),
                         PlaceDatabase.class, "Places")
                 .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
                 .build();
 
         placeDao = db.placeDao();
 
         // 🔥 VERİYİ EKLE VE BEKLE
-        placeDao.insert(new Place("İlk kayıt", 0.0, 0.0)).blockingAwait();
 
         // 🔥 VERİYİ AL VE ADAPTER’E GÖNDER
         List<Place> placeList = placeDao.getAllDirect();
         handleResponse(placeList);
     }
 
-
-
     private void handleResponse(List<Place> placeList) {
-        Log.e("ADAPTER", "Veri sayısı: " + placeList.size()); // 👈 Gözüküyor mu?
+        Log.e("ADAPTER", "Veri sayısı: " + placeList.size());
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        PlaceAdapter placeAdapter = new PlaceAdapter(placeList);
+
+        // 🔥 TIKLAMA LİSTENER EKLENDİ
+        PlaceAdapter placeAdapter = new PlaceAdapter(placeList, place -> {
+            Intent intent = new Intent(MainActivity.this, PlaceDetailActivity.class);
+            intent.putExtra("place", place);
+            startActivity(intent);
+        });
+
+
         binding.recyclerView.setAdapter(placeAdapter);
     }
 
@@ -84,5 +88,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         compositeDisposable.clear();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (placeDao != null) {
+            List<Place> updatedList = placeDao.getAllDirect();
+            handleResponse(updatedList); // 🔁 Liste güncelleniyor
+        }
     }
 }

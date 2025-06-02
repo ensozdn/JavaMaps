@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.enesozden.javamaps.model.Place;
 
@@ -24,5 +25,11 @@ public interface PlaceDao {
 
     @Query("SELECT * FROM place")
     List<Place> getAllDirect(); // sadece geçici test için
+
+    @Query("DELETE FROM Place WHERE id = :placeId")
+    void deleteById(int placeId);
+
+    @Update
+    void update(Place place);
 
 }

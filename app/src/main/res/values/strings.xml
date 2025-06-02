@@ -1,5 +1,36 @@
 <resources>
+
     <string name="recycler_description">Gezi listesi</string>
-    <string name="app_name">JavaMaps</string>
+    <string name="app_name">TripNoute</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="app_toolbar_title">JavaMaps</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+    <string name="place_name_hint">Place Name</string>
+    <string name="description_hint">Description</string>
+    <string name="select_image">Select Image</string>
+    <string name="selected_image">Selected Image</string>
+    <string name="place_name_label">Place Name</string>
+    <string name="description_label">Description</string>
+    <string name="sign_up_button">Sign Up</string>
+
+
+
+
+
+
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="login_button">Log In</string>
+
+
+    <string name="place_item_title">Yer Adı</string>
+    <string name="map_preview">Map Preview</string>
+    <string name="add_place">Add Place</string>
+
+
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="sign_up">Sign Up</string>
+
 </resources>
