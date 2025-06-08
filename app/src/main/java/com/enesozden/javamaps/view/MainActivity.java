@@ -7,6 +7,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,6 +54,19 @@ public class MainActivity extends AppCompatActivity {
         // 🔥 VERİYİ AL VE ADAPTER’E GÖNDER
         List<Place> placeList = placeDao.getAllDirect();
         handleResponse(placeList);
+
+        // Reklam başlatılıyor
+        MobileAds.initialize(this, initializationStatus -> {});
+
+// XML'de tanımladığınız AdView bileşeni buraya bağlanır
+        AdView adView = findViewById(R.id.adView);
+
+// Reklam isteği oluşturulur
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+// Reklam yüklenir
+        adView.loadAd(adRequest);
+
     }
 
     private void handleResponse(List<Place> placeList) {

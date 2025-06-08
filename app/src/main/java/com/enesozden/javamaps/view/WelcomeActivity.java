@@ -1,13 +1,12 @@
 package com.enesozden.javamaps.view;
 
 
-
+import com.enesozden.javamaps.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.enesozden.javamaps.R;
 
 public class WelcomeActivity extends AppCompatActivity {
 
