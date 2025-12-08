@@ -6,7 +6,7 @@ import androidx.room.RoomDatabase;
 
 import com.enesozden.javamaps.model.Place;
 
-@Database(entities = {Place.class},version = 3)
+@Database(entities = {Place.class}, version = 3, exportSchema = false)
 public abstract class PlaceDatabase extends RoomDatabase {
     public abstract PlaceDao placeDao();
 }

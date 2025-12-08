@@ -2,6 +2,7 @@ package com.enesozden.javamaps.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
@@ -24,7 +25,11 @@ public class Place implements Serializable {
     @ColumnInfo(name = "longitude")
     public Double longitude;
 
+    // Boş constructor Room için
+    public Place() {}
+
     // Yeni constructor: açıklama dahil
+    @Ignore
     public Place(String name, String description, Double latitude, Double longitude) {
         this.name = name;
         this.description = description;
@@ -33,15 +38,13 @@ public class Place implements Serializable {
     }
 
     // Eski constructor (kullanılıyorsa bozulmasın diye bıraktım)
+    @Ignore
     public Place(String name, Double latitude, Double longitude) {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
         this.description = ""; // default boş bırak
     }
-
-    // Boş constructor Room için
-    public Place() {}
 
     public String getName() {
         return name;
